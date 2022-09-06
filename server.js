@@ -22,6 +22,7 @@ app.get("/api", (req, res) => {
   res.json({
     title: "test note",
     text: "taking my first note",
+    note_id: randomUUID(),
   });
 });
 
