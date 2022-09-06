@@ -1,5 +1,6 @@
 const { randomUUID } = require("crypto");
 const express = require("express");
+const fs = require("fs");
 const path = require("path"); //comes with node at core SHIPPED
 const db = require("./db/db.json");
 
@@ -29,14 +30,22 @@ app.get("/api", (req, res) => {
 app.get("/api/notes", (req, res) => res.json(db));
 
 app.post("/api/notes", (req, res) => {
-  console.info(`${req.method} request received to add a review`);
+  console.info(`${req.method} request received to add a note`);
   const { title, text } = req.body;
   if (title && text) {
     const newNote = {
       title,
       text,
-      //   note_id: uuid(),
+      note_id: randomUUID(),
     };
+    const noteString = JSON.stringify(newNote);
+
+    fs.writeFile(`./db/${newNote.title}.json`, noteString, (err) =>
+      err
+        ? console.error(err)
+        : console.log(`Note for ${newNote.title} has been written to JSON file`)
+    );
+
     const response = {
       status: "success",
       body: newNote,
@@ -50,5 +59,5 @@ app.post("/api/notes", (req, res) => {
 // POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you).
 
 app.listen(PORT, () =>
-  console.log(`Example app listening at http://localhost:${PORT}`)
+  console.log(`Note app listening at http://localhost:${PORT}`)
 );
