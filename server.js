@@ -2,6 +2,7 @@ const { randomUUID } = require("crypto");
 const express = require("express");
 const fs = require("fs");
 const path = require("path"); //comes with node at core SHIPPED
+//not using db
 const db = require("./db/db.json");
 
 const app = express();
